@@ -3,9 +3,9 @@ from enum import Enum
 
 
 class RoutineLevels(Enum):
-    BEGINNER = 20
+    BEGINNER = 3
     INTERMEDIATE = 50
-    HIGH = 90
+    EXPERT = 90
 
 
 class Main:
@@ -26,19 +26,47 @@ class Main:
         pass = true
         fail = false
         '''
-        return True
+        # get random word & translation
+        line: tuple = self.DB.random_word()
+        print(f"{line[1]}")
 
-    def check(self, word: str, english: bool = True) -> bool:
-        return True
+        translation: str = str(line[2])
 
-    def routine(self, level: RoutineLevels):
+        # ask user for translation
+        answer: str = input("Enter Translation: ")
+
+        if answer.lower().strip() == translation:
+            return True
+        return False
+
+    def routine(self, level_rating: RoutineLevels) -> None:
         '''
         main dev point
         the actual program that asks for input
 
         level = no. of words to complete
         '''
+        passes: int = 0
+        print(f"Starting {level_rating.name}")
+        runs = level_rating.value
+        for i in range(runs):
+            print(f"Level {i}:", end=" ")
+            if self.level() == True:
+                passes += 1
+        print(
+            f"Score: {passes}/{runs} or {int(((passes / runs) * 100) + 0.5)}%"
+        )
 
-    def random(self):
-        random_word = self.DB.random_word()
+    def random(self) -> tuple:
+        random_word: tuple = self.DB.random_word()
         return random_word
+
+
+main = Main()
+# main.DB.add("hello", "hallo")
+# main.DB.add("Thank you", "Danke")
+# main.DB.add("Bye", "Tschüß")
+# main.DB.random_word()
+# print(main.DB.translate("hello"))
+# print(main.DB.translate("danke", english=False))
+main.routine(RoutineLevels.BEGINNER)
